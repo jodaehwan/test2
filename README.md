@@ -1,11 +1,11 @@
 🚀 Multi-Score V2 (멀티 트랙 악보 메이커)
-Multi-Score V2는 웹 브라우저 환경에서 여러 줄(트랙)의 악보를 동시에 편집하고 관리하며, 작성한 악보를 실제 음원으로 재생할 수 있는 다중 오선지 악보 제작 웹 애플리케이션입니다.
+
+Multi-Score V2는 웹 브라우저 환경에서 여러 줄(트랙)의 악보를 동시에 편집하고 관리하며, 
+작성한 악보를 실제 음원으로 재생할 수 있는 다중 오선지 악보 제작 웹 애플리케이션입니다.
 
 🛠 Tech Stack
 Core: Vanilla JavaScript, jQuery
-
 Markup & Style: HTML5, CSS3 (Flexbox, Transform), FontAwesome
-
 Audio: Web Audio API (AudioContext)
 
 ✨ 핵심 기능 (Key Features)
