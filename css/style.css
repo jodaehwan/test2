@@ -1,0 +1,680 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+:root {
+    --toolbar-bg: #2c3e50;
+    --app-bg: #ecf0f1;
+    --staff-bg: #ffffff;
+    --primary: #3498db;
+    --staff-line-color: #333;
+    --base-width: 1280px;
+    --base-height: 720px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Malgun Gothic', sans-serif;
+    background-color: #222;
+    /* Outside area background */
+    overflow: hidden;
+    /* Prevent scrolling outside the scaled app */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Loading Overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2c3e50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20000;
+    color: white;
+    transition: opacity 0.5s ease-out;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.start-btn {
+    margin-top: 20px;
+    padding: 12px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.start-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #3498db;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#app-scaler {
+    width: var(--base-width);
+    height: var(--base-height);
+    background-color: var(--app-bg);
+    position: relative;
+    transform-origin: center center;
+    overflow: hidden;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Toolbar */
+.toolbar {
+    background-color: var(--toolbar-bg);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    height: 100px;
+    box-sizing: border-box;
+    gap: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tool-group h3 {
+    margin: 0 0 5px 0;
+    font-size: 12px;
+    color: #bdc3c7;
+    text-align: center;
+}
+
+.note-options {
+    display: flex;
+    gap: 5px;
+}
+
+.tool-btn {
+    width: 50px;
+    height: 60px;
+    padding: 5px;
+    border: 1px solid transparent;
+    /* No border by default */
+    background: transparent;
+    /* No background */
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.tool-btn img {
+    max-width: 100%;
+    max-height: 100%;
+    filter: brightness(0);
+    /* Icons are black */
+    pointer-events: none;
+}
+
+.tool-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tool-btn.active {
+    background: rgba(52, 152, 219, 0.3);
+    /* Subtle blue highlight for active */
+    border-color: var(--primary);
+}
+
+.tool-btn.active img {
+    filter: brightness(1) invert(1);
+    /* White icon for high contrast when active */
+}
+
+.action-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.divider {
+    width: 1px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin: 0 5px;
+}
+
+.icon-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #34495e;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.icon-action-btn:hover {
+    background: #3d566e;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Subtle lift via shadow instead of transform */
+}
+
+.icon-action-btn.delete-one:hover {
+    background: #d35400;
+}
+
+.icon-action-btn.delete-all:hover {
+    background: #c0392b;
+}
+
+.icon-action-btn.save-png:hover {
+    background: #16a085;
+}
+
+.icon-action-btn.active {
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.5);
+    background: #2c3e50;
+}
+
+.icon-action-btn.delete-one.active {
+    background: #d35400;
+}
+
+#score-container.delete-cursor .placed-note {
+    cursor: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/svgs/solid/eraser.svg'), auto; /* Fallback to crosshair if svg cursor fails */
+}
+
+#score-container.delete-cursor .placed-note:hover {
+    filter: drop-shadow(0 0 5px #e74c3c);
+}
+
+/* Score Container */
+/* Score Header & Title */
+#score-header {
+    width: 1254px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#score-title {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    color: #2c3e50;
+    padding: 10px;
+    outline: none;
+    transition: background 0.2s;
+}
+
+#score-title:hover, #score-title:focus {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+/* Tempo Control */
+.tempo-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 10px;
+}
+
+.tempo-label {
+    font-size: 13px;
+    color: #3498db;
+    font-weight: bold;
+    min-width: 60px;
+}
+
+#tempo-slider {
+    width: 100px;
+    cursor: pointer;
+    accent-color: #3498db;
+}
+
+#score-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 10px 100px 10px;
+    /* Added bottom padding for floating bar */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Floating Controls */
+#floating-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: auto;
+}
+
+.control-inner {
+    background-color: rgba(44, 62, 80, 0.95);
+    backdrop-filter: blur(5px);
+    padding: 10px 10px;
+    padding-right: 15px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playback-label {
+    color: #3498db;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.control-btn {
+    padding: 8px 13px;
+    border: none;
+    background: #34495e;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.control-btn:hover {
+    background: #2c3e50;
+    transform: translateY(-2px);
+}
+
+.control-btn.active {
+    background: #e74c3c;
+}
+
+#play-btn {
+    background: #3498db;
+    padding-right: 11px;
+    width: 33px;
+}
+
+#play-btn:hover {
+    background: #2980b9;
+}
+
+#stop-btn {
+    background: #7f8c8d;
+    margin-right: 10px;
+}
+
+#stop-btn:hover {
+    background: #95a5a6;
+}
+
+.drag-option {
+    font-size: 14px;
+    color: #bdc3c7;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.drag-option label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drag-option input {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.staff-wrapper {
+    background: var(--staff-bg);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 1254px;
+    box-sizing: border-box;
+}
+
+.staff-content {
+    display: flex;
+    position: relative;
+    width: 1234px;
+    height: 96px;
+    background-image: url('../images/sheet.svg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: 10px 0;
+    /* Reduced margin */
+    padding-left: 75px;
+    padding-right: 17px;
+}
+
+.measure {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    cursor: crosshair;
+}
+
+/* Note & Rest Common Style */
+.placed-note,
+.drag-preview {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* Center-based positioning */
+    pointer-events: auto;
+    height: 60px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+}
+
+.drag-preview {
+    position: fixed;
+    /* Preview follows mouse across screen */
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.7;
+}
+
+.drag-preview img {
+    pointer-events: none;
+}
+
+.placed-note img, .drag-preview img {
+    height: 100%;
+    position: relative;
+    top: -16px; 
+    left: -1px;
+}
+
+/* For notes above the middle line (reverse stem) */
+.placed-note.reverse img, .drag-preview.reverse img {
+    transform: rotate(180deg);
+    top: 16px;
+    left: 1px;
+}
+
+/* Rest icons and Quarter notes stay centered */
+.placed-note.rest-type img,
+.drag-preview.rest-type img,
+.placed-note.whole-note img,
+.drag-preview.whole-note img {
+    top: 0;
+    left: 0;
+    transform: none;
+}
+
+.placed-note.rest-type img,
+.drag-preview.rest-type img {
+    height: 80%;
+}
+
+/* Hover effect for measure */
+.measure.drag-over {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Individual Note Highlight during playback & selection */
+.placed-note.playing-note img {
+    filter: invert(21%) sepia(100%) saturate(7414%) hue-rotate(359deg) brightness(94%) contrast(117%) !important;
+}
+
+.placed-note.selected {
+    outline: 2px solid #3498db;
+    outline-offset: 5px;
+    border-radius: 5px;
+    background: rgba(52, 152, 219, 0.1);
+}
+
+/* Snap Guide Line */
+.snap-guide {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 5;
+    transform: translateY(-50%);
+    transition: all 0.05s;
+}
+
+/* Line Highlight Style */
+.snap-guide.is-line {
+    height: 3px;
+    background-color: rgba(52, 152, 219, 0.8);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Space Highlight Style */
+.snap-guide.is-space {
+    height: 12px;
+    background-color: rgba(52, 152, 219, 0.2);
+    border-top: 1px solid rgba(52, 152, 219, 0.3);
+    border-bottom: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+/* Popup Styles */
+#popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#popup-overlay.popup-hidden {
+    display: none;
+}
+
+#popup-alert {
+    position: relative;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px 60px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.popup-icon {
+    font-size: 50px;
+    color: #e74c3c;
+}
+
+.popup-content p {
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+#close-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #95a5a6;
+    transition: color 0.2s;
+    padding: 5px;
+    line-height: 1;
+}
+
+#close-popup:hover {
+    color: #333;
+}
+
+/* 캡처 전용 스타일 */
+.is-capturing #score-container {
+    overflow: visible !important;
+    height: auto !important;
+    background-color: #ecf0f1;
+}
+
+.is-capturing .staff-wrapper {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+}

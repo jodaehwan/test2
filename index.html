@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멀티 트랙 악보 (jQuery)</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="loading-overlay">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p id="loading-text">악보 리소스를 불러오는 중입니다...</p>
+            <button id="start-app-btn" style="display: none;" class="start-btn">시작하기</button>
+        </div>
+    </div>
+    <div id="app-scaler">
+        <div id="app">
+            <header class="toolbar">
+                <div class="tool-group notes">
+                    <h3>음표</h3>
+                    <div class="note-options" id="note-tools">
+                        <button class="tool-btn" data-type="note" data-id="0" data-beat="0.25"><img src="images/note_0.svg" alt="16분"></button>
+                        <button class="tool-btn" data-type="note" data-id="1" data-beat="0.5"><img src="images/note_1.svg" alt="8분"></button>
+                        <button class="tool-btn" data-type="note" data-id="2" data-beat="0.75"><img src="images/note_2.svg" alt="점8분"></button>
+                        <button class="tool-btn active" data-type="note" data-id="3" data-beat="1"><img src="images/note_3.svg" alt="4분"></button>
+                        <button class="tool-btn" data-type="note" data-id="4" data-beat="1.5"><img src="images/note_4.svg" alt="점4분"></button>
+                        <button class="tool-btn" data-type="note" data-id="5" data-beat="2"><img src="images/note_5.svg" alt="2분"></button>
+                        <button class="tool-btn" data-type="note" data-id="6" data-beat="3"><img src="images/note_6.svg" alt="점2분"></button>
+                        <button class="tool-btn" data-type="note" data-id="7" data-beat="4"><img src="images/note_7.svg" alt="온"></button>
+                    </div>
+                </div>
+
+                <div class="tool-group rests">
+                    <h3>쉼표</h3>
+                    <div class="note-options" id="rest-tools">
+                        <button class="tool-btn" data-type="rest" data-id="0" data-beat="0.25"><img src="images/rest_0.svg" alt="16분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="1" data-beat="0.5"><img src="images/rest_1.svg" alt="8분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="2" data-beat="0.75"><img src="images/rest_2.svg" alt="점8분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="3" data-beat="1"><img src="images/rest_3.svg" alt="4분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="4" data-beat="1.5"><img src="images/rest_4.svg" alt="점4분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="5" data-beat="2"><img src="images/rest_5.svg" alt="2분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="6" data-beat="3"><img src="images/rest_6.svg" alt="점2분쉼"></button>
+                        <button class="tool-btn" data-type="rest" data-id="7" data-beat="4"><img src="images/rest_7.svg" alt="온쉼"></button>
+                    </div>
+                </div>
+
+                <div class="tool-group manage">
+                    <h3>편집 및 트랙</h3>
+                    <div class="action-row">
+                        <button id="add-staff" class="icon-action-btn" title="줄 추가"><i class="fa-solid fa-plus"></i></button>
+                        <button id="remove-staff" class="icon-action-btn" title="줄 삭제"><i class="fa-solid fa-minus"></i></button>
+                        <div class="divider"></div>
+                        <button id="delete-selected" class="icon-action-btn delete-one" title="선택 삭제"><i class="fa-solid fa-eraser"></i></button>
+                        <button id="delete-all" class="icon-action-btn delete-all" title="전체 삭제"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="divider"></div>
+                        <button id="save-png" class="icon-action-btn save-png" title="이미지로 저장"><i class="fa-solid fa-image"></i></button>
+                    </div>
+                </div>
+            </header>
+
+            <main id="score-container">
+                <div id="score-header">
+                    <input type="text" id="score-title" placeholder="제목을 입력하세요" value="나만의 악보">
+                </div>
+                <!-- 초기 트랙 -->
+                <div class="staff-wrapper" data-staff-id="1">
+                    <div class="staff-content">
+                        <div class="measure"></div>
+                        <div class="measure"></div>
+                        <div class="measure"></div>
+                        <div class="measure"></div>
+                    </div>
+                </div>
+            </main>
+
+            <div id="floating-controls">
+                <div class="control-inner">
+                    <div class="playback-label" aria-label="듣기"></div>
+                    <button id="play-btn" class="control-btn" aria-label="재생"><i class="fa-solid fa-play"></i></button>
+                    <button id="stop-btn" class="control-btn" aria-label="정지"><i class="fa-solid fa-stop"></i></button>
+                    <div class="drag-option">
+                        <label><input type="checkbox" id="toggle-drag-sound" checked> 드래그 소리</label>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="tempo-control">
+                        <span class="tempo-label">BPM <span id="bpm-value">100</span></span>
+                        <input type="range" id="tempo-slider" min="40" max="200" value="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-overlay" class="popup-hidden">
+        <div id="popup-alert">
+            <div class="popup-content">
+                <i class="fa-solid fa-circle-exclamation popup-icon"></i>
+                <p>한 마디에 4박자 이상<br>넣을 수 없습니다.</p>
+            </div>
+            <button id="close-popup"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+    <!-- html2canvas for PNG export -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
